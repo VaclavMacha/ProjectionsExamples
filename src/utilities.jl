@@ -46,6 +46,28 @@ end
 
 ## --------------------------------------------------------------------------------------------------------
 ## table
+function timecomparison(f::Function, n)
+    out, t = @timed f(n)
+    return t
+end
+
+
+function timecomparison(f::Function, ns::AbstractArray; maxreps::Integer = 10)
+
+    ## precompilation
+    [f(minimum(ns)) for k in 1:3]
+
+    ts = map(ns) do n
+        t = map((rep) -> timecomparison(f, n), 1:maxreps)
+        return [mean(t) std(t)]
+    end
+    T = reduce(vcat, ts)
+    return T[:,1], T[:,2]
+end
+
+
+## --------------------------------------------------------------------------------------------------------
+## table
 function maketable(N, n, m, tabs::DataFrame...; savename::String = "")
 	tab     = vcat(tabs...)
 	labels  = sort(unique(tab[:label]))
