@@ -5,6 +5,7 @@ module ProjectionsExamples
     export run_benchmarks, run_mu
 
     include("utilities.jl")
+    include("examples.jl")
 
     include("run_find_mu.jl")
     include("run_simplex_mod1.jl")
