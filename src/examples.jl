@@ -9,7 +9,7 @@ end
 function timecomparison(f::Function, ns::AbstractArray; maxreps::Integer = 10)
 
     ## precompilation
-    [f(minimum(ns)) for k in 1:3]
+    [f(minimum(ns)) for k in 1:10]
 
     ts = map(ns) do n
         t = map((rep) -> timecomparison(f, n), 1:maxreps)
@@ -22,16 +22,12 @@ end
 
 ## --------------------------------------------------------------------------------------------------------
 ## l1, l2 and lInf
-function l1_comparison(p_l1, p_l1_solver, sd)
-    println("‖p_l1_solver - p_l1‖  = ", round(norm(p_l1_solver .- p_l1), sigdigits = sd));
-end
+function l1_comparison(p_l1, p_l1_solver, c, p0, ε, sd)
+    println("‖p_l1_solver - p_l1‖  = ", round(norm(p_l1_solver .- p_l1), sigdigits = sd), "\n");
 
-function l1_objective(p_l1, p_l1_solver, c, sd)
     println("L(p_l1_solver) = ", round(c'*p_l1_solver, sigdigits = sd))
-    println("L(p_l1)        = ", round(c'*p_l1, sigdigits = sd))
-end
+    println("L(p_l1)        = ", round(c'*p_l1, sigdigits = sd), "\n")
 
-function l1_feasibility(p_l1, p_l1_solver, p0, ε, sd)
     println("Solver solution: ")
     println("  ⋅ ∑p = 1:       ", round(sum(p_l1_solver), sigdigits = sd), " = ", 1)
     println("  ⋅ ‖p - p0‖ ≦ ε: ", round(norm(p_l1_solver .- p0, 1), sigdigits = sd), " ≦ ", ε)
@@ -55,7 +51,7 @@ function l12Inf_plots(p_l1, p_l2, p_lInf, p0, n)
     scatter!(1:n, p0,     label = "p0", marker = :rect)
     scatter!(1:n, p_lInf, label = "p",  marker = :diamond)
 
-    display(plot(p1, p2, p3, layout = (1,3), size = (900, 400), fmt = :png))
+    display(plot(p1, p2, p3, layout = (1,3), size = (900, 400), fmt = :svg))
 end
 
 function l12Inf_timecomparison(n; maxreps::Integer = 10)
@@ -108,7 +104,7 @@ function l12Inf_timecomparison(n; maxreps::Integer = 10)
     p3 = plot(legend = false, title = "l_infty")
     plot!(n, t_lInf)
 
-    display(plot(p1, p2, p3, layout = (1,3), size = (900, 400), xlabel = "n", fmt = :png))
+    display(plot(p1, p2, p3, layout = (1,3), size = (900, 400), xlabel = "n", fmt = :svg))
 end
 
 function philpott_timecomparison(n; maxreps::Integer = 10)
@@ -134,25 +130,21 @@ function philpott_timecomparison(n; maxreps::Integer = 10)
 
     plot(xlabel = "n", ylabel = "t [s]", legend = :topleft, size = (700, 400))
     plot!(n, t_l2, label = "l2")
-    display(plot!(n, t_l2_philpott, label = "l2 philpott", fmt = :png))
+    display(plot!(n, t_l2_philpott, label = "l2 philpott", fmt = :svg))
 end
 
 
 ## --------------------------------------------------------------------------------------------------------
 ## mod1
-function mod1_comparison(p, p_solver, q, q_solver, r, r_solver, sd)
+function mod1_comparison(p, p_solver, q, q_solver, r, r_solver,  p0, q0, r0, C1, C2, sd)
     println("‖p_solver - p‖ = ", round(norm(p_solver .- p), sigdigits = sd))
     println("‖q_solver - q‖ = ", round(norm(q_solver .- q), sigdigits = sd))
-    println("‖r_solver - r‖ = ", round(norm(r_solver .- r), sigdigits = sd))
-end
+    println("‖r_solver - r‖ = ", round(norm(r_solver .- r), sigdigits = sd), "\n")
 
-function mod1_objective(p, p_solver, q, q_solver, r, r_solver, p0, q0, r0, sd)
     L(p, p0, q, q0, r, r0) = norm(p - p0)/2 + norm(q - q0)/2 + norm(r - r0)/2
     println("L(p,q,r)                      = ", round(L(p, p0, q, q0, r, r0), sigdigits = sd))
-    println("L(p_solver,q_solver,r_solver) = ", round(L(p_solver, p0, q_solver, q0, r_solver, r0), sigdigits = sd))
-end
+    println("L(p_solver,q_solver,r_solver) = ", round(L(p_solver, p0, q_solver, q0, r_solver, r0), sigdigits = sd), "\n")
 
-function mod1_feasibility(p, p_solver, q, q_solver, r, r_solver, C1, C2, sd)
     println("Solver solution: ")
     println("  ⋅ ∑p = ∑q:       ", round(sum(p_solver), sigdigits = sd), " = ", round(sum(q_solver), sigdigits = sd))
     println("  ⋅ min(p) ≧ 0:    ", round(minimum(p_solver), sigdigits = sd), " ≧ 0")
@@ -176,7 +168,7 @@ function mod1_plots(p, p_solver, q, q_solver, p0, q0, n, m, sd)
     scatter!(1:m, q0,    label = "q0",       marker = :rect)
     scatter!(1:m, q,     label = "q",        marker = :diamond)
 
-    display(plot(p1, p2, layout = (1,2), size = (900, 400), fmt = :png))
+    display(plot(p1, p2, layout = (1,2), size = (900, 400), fmt = :svg))
 end
 
 function mod1_timecomparison(N; maxreps::Integer = 10)
@@ -196,24 +188,20 @@ function mod1_timecomparison(N; maxreps::Integer = 10)
 
     plot(xlabel = "N", ylabel = "t [s]", legend = :topleft, size = (700, 400))
     plot!(N, ts, label = "secant")
-    display(plot!(N, tb, label = "bisection", fmt = :png))
+    display(plot!(N, tb, label = "bisection", fmt = :svg))
 end
 
 
 ## --------------------------------------------------------------------------------------------------------
 ## mod2
-function mod2_comparison(p, p_solver, q, q_solver, sd)
+function mod2_comparison(p, p_solver, q, q_solver, p0, q0, C1, C2, sd)
     println("‖p_solver - p‖ = ", round(norm(p_solver .- p), sigdigits = sd))
-    println("‖q_solver - q‖ = ", round(norm(q_solver .- q), sigdigits = sd))
-end
+    println("‖q_solver - q‖ = ", round(norm(q_solver .- q), sigdigits = sd), "\n")
 
-function mod2_objective(p, p_solver, q, q_solver, p0, q0, sd)
     L(p, p0, q, q0) = norm(p - p0)/2 + norm(q - q0)/2
     println("L(p,q)               = ", round(L(p, p0, q, q0), sigdigits = sd))
-    println("L(p_solver,q_solver) = ", round(L(p_solver, p0, q_solver, q0), sigdigits = sd))
-end
+    println("L(p_solver,q_solver) = ", round(L(p_solver, p0, q_solver, q0), sigdigits = sd), "\n")
 
-function mod2_feasibility(p, p_solver, q, q_solver, C1, C2, sd)
     println("Solver solution: ")
     println("  ⋅ ∑p = ∑q:          ", round(sum(p_solver), sigdigits = sd), " = ", round(sum(q_solver), sigdigits = sd))
     println("  ⋅ min(p) ≧ 0:       ", round(minimum(p_solver), sigdigits = sd), " ≧ 0")
@@ -237,7 +225,7 @@ function mod2_plots(p, p_solver, q, q_solver, p0, q0, n, m, sd)
     scatter!(1:m, q0,    label = "q0",       marker = :rect)
     scatter!(1:m, q,     label = "q",        marker = :diamond)
 
-    display(plot(p1, p2, layout = (1,2), size = (900, 400), fmt = :png))
+    display(plot(p1, p2, layout = (1,2), size = (900, 400), fmt = :svg))
 end
 
 function mod2_timecomparison(N; maxreps::Integer = 10)
@@ -256,5 +244,5 @@ function mod2_timecomparison(N; maxreps::Integer = 10)
 
     plot(xlabel = "N", ylabel = "t [s]", legend = :topleft, size = (700, 400))
     plot!(N, ts, label = "secant")
-    display(plot!(N, tb, label = "bisection", fmt = :png))
+    display(plot!(N, tb, label = "bisection", fmt = :svg))
 end
