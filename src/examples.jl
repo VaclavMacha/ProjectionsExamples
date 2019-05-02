@@ -254,9 +254,9 @@ function mod12_plots(p1, q1, p2, q2, p0, q0, n, m)
     scatter!(1:n, p2, label = "p (AATP2)", marker = :star5)
 
     plot2 = plot(legend = :topleft, title = "Solution q")
-    scatter!(1:n, q0, label = "q0",        marker = :diamond)
-    scatter!(1:n, q1, label = "q (AATP1)", marker = :rect)
-    scatter!(1:n, q2, label = "q (AATP2)", marker = :star5)
+    scatter!(1:m, q0, label = "q0",        marker = :diamond)
+    scatter!(1:m, q1, label = "q (AATP1)", marker = :rect)
+    scatter!(1:m, q2, label = "q (AATP2)", marker = :star5)
 
     display(plot(plot1, plot2, layout = (1,2), size = (900, 400), fmt = :svg))
 end
