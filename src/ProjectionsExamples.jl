@@ -8,12 +8,12 @@ module ProjectionsExamples
     include("examples.jl")
 
     include("run_find_mu.jl")
-    include("run_simplex_mod1.jl")
-    include("run_simplex_mod2.jl")
+    include("run_AATP1.jl")
+    include("run_AATP2.jl")
     include("run_philpott.jl")
-    include("run_minimize_linear_on_simplex_l1.jl")
-    include("run_minimize_linear_on_simplex_l2.jl")
-    include("run_minimize_linear_on_simplex_lInf.jl")
+    include("run_DRO_l1.jl")
+    include("run_DRO_l2.jl")
+    include("run_DRO_lInf.jl")
     include("run.jl")
 
 end # module

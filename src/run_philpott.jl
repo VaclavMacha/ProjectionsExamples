@@ -40,7 +40,7 @@ function run_philpott(n::Integer,
 		p0 = rand(p0_dist, n)
 		p0 ./= sum(p0)
 		c  = rand(c_dist, n)
-		return Projections.philpott_optimized(p0, c, ε; atol = atol)
+		return Projections.solve_philpott_optimized(p0, c, ε; atol = atol)
 	end
 
 	return run_benchmark(eval, :philpott; max_evals = max_evals)

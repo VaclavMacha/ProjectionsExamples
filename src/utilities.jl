@@ -24,11 +24,11 @@ function run_benchmark(f::Function, problem::Symbol, method::Symbol = :none; max
 
 
 	## Create DataFrame with results
-	if problem in [:l1, :lInf, :philpott]
+	if problem in [:DROl1, :DROlInf, :philpott]
 		DataFrame(label = "$problem", t = mean(t), tstd = std(t), evals = NaN, evalsstd = NaN,
 				  x = NaN, xstd = NaN, lb = NaN, lbstd = NaN, ub = NaN, ubstd = NaN)
-	elseif problem in [:mod1, :mod2, :mod3, :mod4, :l2]
-		if problem == :mod3
+	elseif problem in [:AATP1, :AATP2, :AATP3, :AATP4, :DROl2]
+		if problem == :AATP3
 			key = :λ
 		else
 			key = :μ
