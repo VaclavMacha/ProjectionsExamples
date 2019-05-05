@@ -1,10 +1,8 @@
 function run_benchmarks(tablesavepath::String = "", plotsavepath::String = ""; kwargs...)
 
 
-	l  = unique(vcat(3:0.2:4, 4:0.1:5));
-
 	## AATP1, AATP2
-	# l    = unique(vcat(3:0.2:4, 4:0.1:5, 5:0.05:6));
+	l    = unique(vcat(3:0.2:4, 4:0.1:5, 5:0.05:6));
 	mtds = [:secant, :bisection]
 
 	n, m, tab1 = run_AATP1(l, mtds; kwargs...)
@@ -24,7 +22,7 @@ function run_benchmarks(tablesavepath::String = "", plotsavepath::String = ""; k
 
 
 	## AATP2 with fixed C2
-	# l    = unique(vcat(3:0.2:4, 4:0.1:5, 5:0.05:6));
+	l    = unique(vcat(3:0.2:4, 4:0.1:5, 5:0.05:6));
 	mtds = [:secant, :bisection]
 
 	n, m, tab    = run_AATP2(l, mtds; fix = 100, kwargs...)
@@ -41,7 +39,7 @@ function run_benchmarks(tablesavepath::String = "", plotsavepath::String = ""; k
 
 
 	## DRO: l1, l2 and lInf norm
-	# l    = unique(vcat(3:0.2:4, 4:0.1:5, 5:0.05:6));
+	l    = unique(vcat(3:0.2:4, 4:0.1:5, 5:0.05:6));
 	mtds = [:newton, :secant, :bisection]
 
 	n, tab1    = run_DRO_lInf(l; kwargs...)
@@ -69,9 +67,8 @@ function run_benchmarks(tablesavepath::String = "", plotsavepath::String = ""; k
 	end
 
 
-l  = unique(vcat(2:0.1:3));
 	## DRO l2 vs. Philpott
-	# l    = unique(vcat(3:0.1:4, 4:0.05:5));
+	l    = unique(vcat(3:0.1:4, 4:0.05:5));
 	mtds = [:newton, :secant, :bisection]
 
 	n, tab1  = run_DRO_l2(l, mtds; kwargs...)
